@@ -13,6 +13,8 @@ bot.on("connect").subscribe(() => {
   bot.join("forsen")
 })
 
+bot.on("unknown").subscribe(xd => console.log(xd.line))
+
 bot.connect()
 
 bot.command(/^miniDank$/).subscribe(req => req.send("pajaDank 🎺 doot"))

@@ -44,7 +44,7 @@ async function getJServiceQuestions(count: number | string) {
 }
 
 async function getGazatuWinQuestions(count: number | string) {
-  const res = await axios.get(`https://api.gazatu.win/trivia/questions?count=${count}`)
+  const res = await axios.get(`https://api.gazatu.xyz/trivia/questions?count=${count}`)
   const questions = [] as Question[]
 
   for (const idx in res.data) {
@@ -203,7 +203,7 @@ export default function registerTrivia(bot: IrcBot) {
 
   bot.command(/^!customtrivia3-report(:?$| (.+))/i).subscribe(async req => {
     if (trivia.currentId > 0) {
-      await axios.post("http://api.gazatu.win/trivia/reports", {
+      await axios.post("http://api.gazatu.xyz/trivia/reports", {
         questionId: trivia.currentId,
         user: req.usr,
         message: req.match[1] ? req.match[1] : "",
