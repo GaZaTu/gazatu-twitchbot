@@ -185,7 +185,7 @@ function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export default function registerTriviaHandler(bot: IrcBot) {
+export default function registerTrivia(bot: IrcBot) {
   bot.command(/^!customtrivia1 (start|stop)(?:(?: (\d+))|)/i).subscribe(async req => {
     const questions = await getJServiceQuestions(req.match[2] || 1)
     runTrivia(req, questions)

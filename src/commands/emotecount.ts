@@ -72,7 +72,7 @@ function registerCommand(bot: IrcBot, name: string, emotes: RegExp, returnmsg: s
   })
 }
 
-export default function register(bot: IrcBot) {
+export default function registerEmoteCount(bot: IrcBot) {
   registerCommand(bot, "beecount", /BBona|BBaper|bUrself|HONEYDETECTED|forsenBee|🐝|whykinBee|whykinG|pajaBee|nymnBee/g, "bees")
   registerCommand(bot, "dankcount", /pajaDank|miniDank|FeelsDankMan/g, "dank emotes")
   registerCommand(bot, "gachicount2", /gachiHYPER|gachiGASM|HandsUp|gachiSANTA|forsenSleeper|gachiBASS|gachiPRIDE|gachiGAZUMU|GachiPls|pajaGASM/g, "gachi emotes")
