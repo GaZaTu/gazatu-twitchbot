@@ -1,0 +1,24 @@
+{
+  "name": "gazatu-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "tsc-watch": "tsc --watch",
+    "start": "node dist/main",
+    "dev": "node ./node_modules/nodemon/bin/nodemon.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/websocket": "0.0.40",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "@types/string-similarity": "^1.2.0",
+    "axios": "^0.18.0",
+    "rxjs": "^6.3.3",
+    "string-similarity": "^2.0.0",
+    "websocket": "^1.0.28"
+  }
+}
