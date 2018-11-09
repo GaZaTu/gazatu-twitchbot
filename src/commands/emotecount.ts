@@ -79,4 +79,5 @@ export default function registerEmoteCount(bot: IrcBot) {
   registerCommand(bot, "namcount", /NaM/g, "nams")
   registerCommand(bot, "kkonacount", /KKona|KKonaw|KKaper|KKool/g, "kool emotes")
   registerCommand(bot, "pajcount", /pajaCmon|pajaCool|pajaDank|pajaDog|pajaDuck|pajaGASM|pajaH|pajaHappy|pajaKek|pajaL|pajaPepe|pajaR|pajaS|pajaVan|pajaW|pajaXD|pajaCMON/g, "paj emotes")
+  registerCommand(bot, "pepegacount", /Pepega|Pepegwa/g, " Pepega s")
 }
