@@ -51,6 +51,8 @@ export class IrcBot extends IrcClient {
 
     if (timeDiff < 1600) {
       setTimeout(() => this.sendInsecure(chn, msg), 1650 - timeDiff)
+
+      return
     }
 
     this._tsOfLastSend = Date.now()
