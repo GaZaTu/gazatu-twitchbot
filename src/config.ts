@@ -5,12 +5,14 @@ interface AppConfigInput {
   production?: boolean
   nick: string
   pass: string
+  channels?: string[]
 }
 
 interface AppConfig {
   production: boolean
   nick: string
   pass: string
+  channels: string[]
 }
 
 const configPath = path.join(__dirname, "/../config.json")
@@ -26,6 +28,7 @@ export function appConfig() {
       production: production,
       nick: input.nick,
       pass: input.pass,
+      channels: input.channels || [],
     }
   }
 

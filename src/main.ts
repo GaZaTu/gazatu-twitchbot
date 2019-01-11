@@ -10,7 +10,8 @@ bot.on("connect").subscribe(() => {
   bot.reqCap("commands")
   bot.reqCap("membership")
   bot.reqCap("tags")
-  bot.join("forsen")
+  
+  appConfig().channels.forEach(chn => bot.join(chn))
 })
 
 bot.on("unknown").subscribe(xd => console.log(xd.line))
