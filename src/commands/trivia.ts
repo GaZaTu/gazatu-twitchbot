@@ -43,8 +43,9 @@ async function getJServiceQuestions(count: number | string) {
   return questions
 }
 
-async function getGazatuWinQuestions(count: number | string) {
-  const res = await axios.get(`https://api.gazatu.xyz/trivia/questions?count=${count}`)
+async function getGazatuWinQuestions(count: number | string, config = "") {
+  const fixedConfig = config.trim().split(" ").join("&")
+  const res = await axios.get(`https://api.gazatu.xyz/trivia/questions?count=${count}${fixedConfig ? `&${fixedConfig}` : ""}`)
   const questions = [] as Question[]
 
   for (const idx in res.data) {
@@ -191,8 +192,8 @@ export default function registerTrivia(bot: IrcBot) {
     runTrivia(req, questions)
   })
 
-  bot.command(/^!customtrivia3 (start|stop)(?:(?: (\d+))|)/i).subscribe(async req => {
-    const questions = await getGazatuWinQuestions(req.match[2] || 1)
+  bot.command(/^!customtrivia3 (start|stop)(?:(?: (\d+)(.*))|)/i).subscribe(async req => {
+    const questions = await getGazatuWinQuestions(req.match[2] || 1, req.match[3])
     runTrivia(req, questions)
   })
 
