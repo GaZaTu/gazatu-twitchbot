@@ -45,12 +45,22 @@ interface Controller {
 
 export class IrcBot extends IrcClient {
   private _tsOfLastSend = Date.now()
+  private _messagesInWait = 0
 
   sendInsecure(chn: string, msg: string) {
     const timeDiff = (Date.now() - this._tsOfLastSend)
 
     if (timeDiff < 1600) {
-      setTimeout(() => this.sendInsecure(chn, msg), 1650 - timeDiff)
+      if (this._messagesInWait > 4) {
+        return
+      }
+
+      this._messagesInWait++
+
+      setTimeout(() => {
+        this._messagesInWait--
+        this.sendInsecure(chn, msg)
+      }, 1650 - timeDiff)
 
       return
     }
