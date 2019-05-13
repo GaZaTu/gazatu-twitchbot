@@ -44,8 +44,8 @@ async function getJServiceQuestions(count: number | string) {
 }
 
 async function getGazatuWinQuestions(count: number | string, config = "") {
-  const fixedConfig = config.trim().split(" ").join("&")
-  const res = await axios.get(`https://api.gazatu.xyz/trivia/questions?count=${count}${fixedConfig ? `&${fixedConfig}` : ""}`)
+  const fixedConfig = config.trim().split(" ").join("&").replace(/ /g, "%20")
+  const res = await axios.get(`https://api.gazatu.xyz/trivia/questions?verified=true&count=${count}${fixedConfig ? `&${fixedConfig}` : ""}`)
   const questions = [] as Question[]
 
   for (const idx in res.data) {
