@@ -13,7 +13,7 @@ interface Question {
 }
 
 async function getJServiceQuestions(count: number | string) {
-  const res = await axios.get(`http://jservice.io/api/random?count=${count}`)
+  const res = await axios.get(`http://jservice.io/api/random?count=${Number(count) > 50 ? 50 : count}`)
   const questions = [] as Question[]
 
   for (const idx in res.data) {
@@ -45,7 +45,7 @@ async function getJServiceQuestions(count: number | string) {
 
 async function getGazatuWinQuestions(count: number | string, config = "") {
   const fixedConfig = config.trim().split(" ").join("&").replace(/ /g, "%20")
-  const res = await axios.get(`https://api.gazatu.xyz/trivia/questions?verified=true&count=${count}${fixedConfig ? `&${fixedConfig}` : ""}`)
+  const res = await axios.get(`https://api.gazatu.xyz/trivia/questions?verified=true&count=${Number(count) > 50 ? 50 : count}${fixedConfig ? `&${fixedConfig}` : ""}`)
   const questions = [] as Question[]
 
   for (const idx in res.data) {
@@ -110,73 +110,72 @@ const trivia = {
   running: false,
   questions: 0,
   currentId: -1,
-  timestamp: Date.now()
 }
 
 async function runTrivia(req: CommandRequest, questions: Question[]) {
-  if (req.match[1] === "start" && (!trivia.running || trivia.timestamp + (1000 * 90) < Date.now())) {
+  if (req.match[1] === "start" && !trivia.running) {
     trivia.running = true
     trivia.questions = questions.length
 
-    for (const idxxd in questions) {
-      const idx = parseInt(idxxd)
-      const item = questions[idx]
+    try {
+      for (const idxxd in questions) {
+        const idx = parseInt(idxxd)
+        const item = questions[idx]
 
-      if (!trivia.running) {
-        break
-      }
-
-      if (item.id) {
-        trivia.currentId = item.id;
-      }
-
-      trivia.timestamp = Date.now()
-
-      await req.send(`${idx + 1}/${questions.length} category: ${item.category} :) question: ${item.question}`)
-
-      const timer1 = setTimeout(() => req.send(item.hints[0]), 15000)
-      const timer2 = setTimeout(() => req.send(item.hints[1]), 30000)
-
-      let onmsg: (req: PrivmsgEvent) => void
-
-      const done = new Promise<void>(resolve => {
-        const timer3 = setTimeout(() => {
-          req.send(`you guys suck lol the answer was "${item.answer}"`)
-
-          resolve()
-        }, 45000)
-
-        onmsg = (req2) => {
-          if (req2.chn !== req.chn) {
-            return
-          }
-
-          const similarity = compareTwoStrings(req2.msg, item.answer)
-
-          if (similarity < 0.9) {
-            return
-          }
-
-          clearTimeout(timer1)
-          clearTimeout(timer2)
-          clearTimeout(timer3)
-
-          req.send(`${req2.usr} got it right miniDank the answer was "${item.answer}"`)
-
-          resolve()
+        if (!trivia.running) {
+          break
         }
-      })
 
-      const sub = req.bot.on("privmsg").subscribe(onmsg!)
+        if (item.id) {
+          trivia.currentId = item.id;
+        }
 
-      await done
-      sub.unsubscribe()
-      trivia.currentId = -1
-      await delay(10000)
+        await req.send(`${idx + 1}/${questions.length} category: ${item.category} :) question: ${item.question}`)
+
+        const timer1 = setTimeout(() => req.send(item.hints[0]), 15000)
+        const timer2 = setTimeout(() => req.send(item.hints[1]), 30000)
+
+        let onmsg: (req: PrivmsgEvent) => void
+
+        const done = new Promise<void>(resolve => {
+          const timer3 = setTimeout(() => {
+            req.send(`you guys suck lol the answer was "${item.answer}"`)
+
+            resolve()
+          }, 45000)
+
+          onmsg = (req2) => {
+            if (req2.chn !== req.chn) {
+              return
+            }
+
+            const similarity = compareTwoStrings(req2.msg, item.answer)
+
+            if (similarity < 0.9) {
+              return
+            }
+
+            clearTimeout(timer1)
+            clearTimeout(timer2)
+            clearTimeout(timer3)
+
+            req.send(`${req2.usr} got it right miniDank the answer was "${item.answer}"`)
+
+            resolve()
+          }
+        })
+
+        const sub = req.bot.on("privmsg").subscribe(onmsg!)
+
+        await done
+        sub.unsubscribe()
+        trivia.currentId = -1
+        await delay(10000)
+      }
+    } finally {
+      req.send(`trivia ended nam`)
+      trivia.running = false
     }
-
-    req.send(`trivia ended nam`)
-    trivia.running = false
   } else if (req.match[1] === "stop") {
     trivia.running = false
   }
