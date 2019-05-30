@@ -1,3 +1,3 @@
-export * from "./irc";
-export * from "./bot";
-export * from "./data";
+export * from "../irc/data";
+export * from "./irc-data";
+export * from "./irc-bot";

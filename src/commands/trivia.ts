@@ -2,7 +2,7 @@ import { compareTwoStrings } from "string-similarity";
 import axios from "axios";
 import { readFile } from "fs";
 import { promisify } from "util";
-import { IrcBot, CommandRequest, PrivmsgEvent } from "../lib/twitch";
+import { IrcHandlerBotRequest, IrcEventMap, IrcHandlerBot } from "../lib/irc";
 
 interface Question {
   id?: number
@@ -112,7 +112,7 @@ const trivia = {
   currentId: -1,
 }
 
-async function runTrivia(req: CommandRequest, questions: Question[]) {
+export async function runTrivia(req: IrcHandlerBotRequest, questions: Question[]) {
   if (req.match[1] === "start" && !trivia.running) {
     trivia.running = true
     trivia.questions = questions.length
@@ -135,7 +135,7 @@ async function runTrivia(req: CommandRequest, questions: Question[]) {
         const timer1 = setTimeout(() => req.send(item.hints[0]), 15000)
         const timer2 = setTimeout(() => req.send(item.hints[1]), 30000)
 
-        let onmsg: (req: PrivmsgEvent) => void
+        let onmsg: (req: IrcEventMap["privmsg"]) => void
 
         const done = new Promise<void>(resolve => {
           const timer3 = setTimeout(() => {
@@ -185,7 +185,7 @@ function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-export default function registerTrivia(bot: IrcBot) {
+export default function registerTrivia(bot: IrcHandlerBot) {
   bot.command(/^!customtrivia1 (start|stop)(?:(?: (\d+))|)/i).subscribe(async req => {
     const questions = await getJServiceQuestions(req.match[2] || 1)
     runTrivia(req, questions)

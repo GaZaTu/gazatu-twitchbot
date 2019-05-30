@@ -1,12 +1,12 @@
-import { IrcBot, CommandRequest } from "../lib/twitch";
 import axios from "axios";
+import { IrcHandlerBot, IrcHandlerBotRequest } from "../lib/irc";
 
 const monthNames = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-async function genericEmoteCount(req: CommandRequest, emotes: RegExp, returnmsg: string, plus: number) {
+async function genericEmoteCount(req: IrcHandlerBotRequest, emotes: RegExp, returnmsg: string, plus: number) {
   const date = req.match[2 + plus] ? new Date(parseInt("20" + req.match[3 + plus]), parseInt(req.match[2 + plus]) - 1) : new Date()
   const month = monthNames[date.getMonth()]
   const year = date.getFullYear()
@@ -28,7 +28,7 @@ async function genericEmoteCount(req: CommandRequest, emotes: RegExp, returnmsg:
   }
 }
 
-async function genericMaxEmoteCount(req: CommandRequest, emotes: RegExp, returnmsg: string) {
+async function genericMaxEmoteCount(req: IrcHandlerBotRequest, emotes: RegExp, returnmsg: string) {
   let date = new Date()
   let month = monthNames[date.getMonth()]
   let year = date.getFullYear()
@@ -62,7 +62,7 @@ async function genericMaxEmoteCount(req: CommandRequest, emotes: RegExp, returnm
   }
 }
 
-function registerCommand(bot: IrcBot, name: string, emotes: RegExp, returnmsg: string) {
+function registerCommand(bot: IrcHandlerBot, name: string, emotes: RegExp, returnmsg: string) {
   bot.command(new RegExp(`^!${name}(?: ([^\\d\\W]+)|)(?: (\\d+)\.(\\d+)|)`)).subscribe(req => {
     genericEmoteCount(req, emotes, returnmsg, 0)
   })
@@ -72,7 +72,7 @@ function registerCommand(bot: IrcBot, name: string, emotes: RegExp, returnmsg: s
   })
 }
 
-export default function registerEmoteCount(bot: IrcBot) {
+export default function registerEmoteCount(bot: IrcHandlerBot) {
   registerCommand(bot, "beecount", /BBona|BBaper|bUrself|HONEYDETECTED|forsenBee|🐝|whykinBee|whykinG|pajaBee|nymnBee/g, "bees")
   registerCommand(bot, "dankcount", /pajaDank|miniDank|FeelsDankMan/g, "dank emotes")
   registerCommand(bot, "gachicount2", /gachiHYPER|gachiGASM|HandsUp|gachiSANTA|forsenSleeper|gachiBASS|gachiPRIDE|gachiGAZUMU|GachiPls|pajaGASM/g, "gachi emotes")
