@@ -1,4 +1,4 @@
-import { Subject } from "rxjs";
+import { Subject, Observable } from "rxjs";
 import { filter, first } from "rxjs/operators";
 import { IrcEventMap, IrcEvent, ircEventIs } from "./data";
 import { lineAndTagsToIrcEvent, lineToLineAndTags } from "./parser";
@@ -94,7 +94,7 @@ export class IrcHandler<EventMap extends IrcEventMap = IrcEventMap> {
   }
 
   get events() {
-    return this._events.asObservable()
+    return this._events.asObservable() as any as Observable<EventMap[keyof EventMap]>
   }
 
   get log() {

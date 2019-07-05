@@ -107,6 +107,7 @@ async function getNamQuestions(count: number | string) {
 }
 
 const trivia = {
+  stopped: true,
   running: false,
   questions: 0,
   currentId: -1,
@@ -115,6 +116,7 @@ const trivia = {
 export async function runTrivia(req: IrcHandlerBotRequest, questions: Question[]) {
   if (req.match[1] === "start" && !trivia.running) {
     trivia.running = true
+    trivia.stopped = false
     trivia.questions = questions.length
 
     try {
@@ -122,7 +124,7 @@ export async function runTrivia(req: IrcHandlerBotRequest, questions: Question[]
         const idx = parseInt(idxxd)
         const item = questions[idx]
 
-        if (!trivia.running) {
+        if (!trivia.running || trivia.stopped) {
           break
         }
 
@@ -177,7 +179,7 @@ export async function runTrivia(req: IrcHandlerBotRequest, questions: Question[]
       trivia.running = false
     }
   } else if (req.match[1] === "stop") {
-    trivia.running = false
+    trivia.stopped = true
   }
 }
 

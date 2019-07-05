@@ -26,5 +26,5 @@ bot.command(/^miniDank$/)
 bot.command(/^pajaDank$/)
   .subscribe(req => req.send("miniDank 🎺 doot"))
 
-registerEmoteCount(bot)
-registerTrivia(bot)
+bot.use(registerEmoteCount)
+bot.use(registerTrivia)

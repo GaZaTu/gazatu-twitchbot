@@ -16,7 +16,7 @@ export class IrcHandlerBotRequest {
   constructor(
     private _event: IrcEventMap["privmsg"],
     private _match: RegExpExecArray,
-    private _bot: IrcHandlerBot,
+    private _bot: IrcHandlerBot<any>,
   ) { }
 
   async sendInsecure(msg: string) {
@@ -121,7 +121,7 @@ export class IrcHandlerBot<EventMap extends IrcEventMap = IrcEventMap> extends I
       .subscribe(req => controller.run(req))
   }
 
-  use(fn: (bot: IrcHandlerBot) => unknown) {
+  use(fn: (bot: IrcHandlerBot<any>) => unknown) {
     fn(this)
   }
 }
