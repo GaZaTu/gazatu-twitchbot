@@ -25,7 +25,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "rxjs": "^6.5.2",
-    "string-similarity": "^3.0.0",
+    "string-similarity": "^2.0.0",
     "ws": "^7.0.0"
   }
 }

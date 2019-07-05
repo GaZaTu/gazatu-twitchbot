@@ -121,7 +121,9 @@ export class IrcHandlerBot<EventMap extends IrcEventMap = IrcEventMap> extends I
       .subscribe(req => controller.run(req))
   }
 
-  use(fn: (bot: IrcHandlerBot<any>) => unknown) {
-    fn(this)
+  use(...fns: ((bot: IrcHandlerBot<any>) => unknown)[]) {
+    for (const fn of fns) {
+      fn(this)
+    }
   }
 }
