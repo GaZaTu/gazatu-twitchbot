@@ -23,7 +23,7 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "rxjs": "^6.5.2",
     "string-similarity": "^2.0.0",
     "ws": "^7.0.0"
